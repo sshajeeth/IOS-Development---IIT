@@ -58,6 +58,7 @@
 		4A8D90AA25C9E2F6008B204C /* RGB Mixer */ = {
 			isa = PBXGroup;
 			children = (
+				4A99FBCD25CA8648006960A1 /* Views */,
 				4A8D90C125C9E4B2008B204C /* Models */,
 				4A8D90C025C9E4A0008B204C /* Controllers */,
 				4A8D90AB25C9E2F6008B204C /* AppDelegate.swift */,
@@ -71,7 +72,6 @@
 		4A8D90C025C9E4A0008B204C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				4A8D90C325C9E766008B204C /* Color.swift */,
 				4A8D90C725C9E998008B204C /* RGBController.swift */,
 			);
 			path = Controllers;
@@ -80,10 +80,18 @@
 		4A8D90C125C9E4B2008B204C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				4A8D90C325C9E766008B204C /* Color.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		4A99FBCD25CA8648006960A1 /* Views */ = {
+			isa = PBXGroup;
+			children = (
 				4A8D90B125C9E2F6008B204C /* Main.storyboard */,
 				4A8D90B625C9E2F7008B204C /* LaunchScreen.storyboard */,
 			);
-			path = Models;
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
