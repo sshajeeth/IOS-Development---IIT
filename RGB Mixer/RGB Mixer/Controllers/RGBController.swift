@@ -20,7 +20,7 @@ class RGBController: UIViewController {
     
     @IBOutlet weak var output_img: UIImageView!
     
-
+    
     var generated_color:Color?
     
     override func viewDidLoad() {
@@ -49,12 +49,12 @@ class RGBController: UIViewController {
         blue_slider.thumbTintColor = UIColor.blue
         
         
-//        Initializing the initial color of the output image
+        //        Initializing the initial color of the output image
         generated_color = Color(red: 0.0, green: 0.0, blue: 0.0)
         output_img.backgroundColor = generated_color?.getColor()
         
         
-//        Color Output Image Customization
+        //        Color Output Image Customization
         output_img.layer.borderWidth = 1
         output_img.layer.borderColor = UIColor.darkGray.cgColor
         output_img.layer.masksToBounds = false
