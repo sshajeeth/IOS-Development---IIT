@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="ipad9_7" orientation="landscape" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="icon-calculator" translatesAutoresizingMaskIntoConstraints="NO" id="0c0-7k-Zev">
+                                <rect key="frame" x="242" y="170" width="541" height="428"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Budget Planner" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3oF-Yu-ikg">
+                                <rect key="frame" x="262" y="545" width="501" height="53"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="44"/>
+                                <color key="textColor" red="0.13505718110000001" green="0.15807014699999999" blue="0.35606789589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="0c0-7k-Zev" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="796-WM-Bud"/>
+                            <constraint firstItem="3oF-Yu-ikg" firstAttribute="centerX" secondItem="0c0-7k-Zev" secondAttribute="centerX" id="Cni-Et-IFR"/>
+                            <constraint firstItem="0c0-7k-Zev" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="242" id="Qhs-0b-Vs7"/>
+                            <constraint firstItem="0c0-7k-Zev" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="170" id="lm7-n3-7SU"/>
+                            <constraint firstItem="3oF-Yu-ikg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="262" id="tSz-2L-Itq"/>
+                            <constraint firstItem="0c0-7k-Zev" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="uut-a9-bDV"/>
+                            <constraint firstItem="3oF-Yu-ikg" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="545" id="wyd-7D-rmj"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="52.734375" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="icon-calculator" width="168" height="168"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

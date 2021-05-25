@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20E241" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Expenses" representedClassName="Expenses" syncable="YES" codeGenerationType="class">
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="date" optional="YES" attributeType="String"/>
+        <attribute name="expense_category" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="ocurance" optional="YES" attributeType="String"/>
+        <attribute name="reminder" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ExpensesCategory" inverseName="expenses" inverseEntity="ExpensesCategory"/>
+    </entity>
+    <entity name="ExpensesCategory" representedClassName="ExpensesCategory" syncable="YES" codeGenerationType="class">
+        <attribute name="budget" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="color" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <relationship name="expenses" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Expenses" inverseName="category" inverseEntity="Expenses"/>
+    </entity>
+    <elements>
+        <element name="Expenses" positionX="-442.484130859375" positionY="300.0574645996094" width="128" height="149"/>
+        <element name="ExpensesCategory" positionX="261" positionY="198" width="128" height="104"/>
+    </elements>
+</model>
