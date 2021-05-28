@@ -13,12 +13,11 @@ enum color: Int {
     case blue, red, green, yellow, orange, purple, gray
 }
 
-class AddEditCategoryViewController: UIViewController {
+class AddEditCategoryViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var category_name_tf: UITextField!
     @IBOutlet var category_budget_tf: UITextField!
     @IBOutlet var category_notes_tv: UITextView!
     
-    var categories: [ExpensesCategory] = []
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var color_name = "#000000"
     var editingMode: Bool = false
@@ -33,6 +32,12 @@ class AddEditCategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if !editingMode {
+            // Settings the placeholder for notes UITextView
+            category_notes_tv.delegate = self
+            category_notes_tv.text = "Notes"
+            category_notes_tv.textColor = UIColor.lightGray
+        }
         configureView()
         // Do any additional setup after loading the view.
     }
@@ -62,6 +67,7 @@ class AddEditCategoryViewController: UIViewController {
     }
     
     @IBAction func addCategory(_ sender: UIBarButtonItem) {
+        if validateFields(){
         let entity = NSEntityDescription.entity(forEntityName: "ExpensesCategory", in: context)!
         var category = NSManagedObject()
         
@@ -83,6 +89,11 @@ class AddEditCategoryViewController: UIViewController {
         
         self.dismissPopUp()
         
+        }else{
+            let alert = UIAlertController(title: "Error", message: "Please fill the required fields.", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     @IBAction func cancelCategory(_ sender: UIBarButtonItem) {
         self.dismissPopUp()
@@ -113,14 +124,32 @@ class AddEditCategoryViewController: UIViewController {
         popoverPresentationController?.delegate?.popoverPresentationControllerDidDismissPopover?(popoverPresentationController!)
     }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+        
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Notes"
+            textView.textColor = UIColor.lightGray
+        }
+        
+    }
+    
+    func validateFields() -> Bool {
+        if !(category_name_tf.text!.isEmpty) && !(category_budget_tf.text!.isEmpty){
+            return true
+        }else{
+            return false
+        }
+    }
     
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="ipad9_7" orientation="landscape" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
@@ -45,7 +45,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bell.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="8Dy-zV-qNa">
-                        <rect key="frame" x="559" y="7.5" width="30" height="25"/>
+                        <rect key="frame" x="539" y="7.5" width="30" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Due" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4dS-EK-KfC">
@@ -55,6 +55,15 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bwL-Kh-xF7">
+                        <rect key="frame" x="570" y="3" width="30" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                        <state key="normal" image="info.circle.fill" catalog="system"/>
+                        <connections>
+                            <action selector="openNotes:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="WVE-Cg-PVA"/>
+                        </connections>
+                    </button>
                 </subviews>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -63,6 +72,7 @@
                 <outlet property="expense_date_lbl" destination="4AG-w6-W0Q" id="BrV-a8-s3H"/>
                 <outlet property="expense_due_lbl" destination="4dS-EK-KfC" id="h6T-0Z-1Bg"/>
                 <outlet property="expense_name_lbl" destination="Xd9-3I-KjI" id="0A0-tw-OAH"/>
+                <outlet property="expense_notes_icon" destination="H2p-sc-9uM" id="aSI-uz-ZxZ"/>
                 <outlet property="progressBar" destination="ArB-jV-tO2" id="Rlx-ng-F64"/>
                 <outlet property="reminderIcon" destination="8Dy-zV-qNa" id="0Bs-Kr-d5u"/>
             </connections>
@@ -71,6 +81,7 @@
     </objects>
     <resources>
         <image name="bell.fill" catalog="system" width="128" height="124"/>
+        <image name="info.circle.fill" catalog="system" width="128" height="121"/>
         <systemColor name="systemGray6Color">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

@@ -9,7 +9,6 @@
 import UIKit
 
 class ExpenseTableViewCell: UITableViewCell {
-    var cellDelegate: ExpenseTableViewCellDelegate?
     @IBOutlet var expense_name_lbl: UILabel!
     @IBOutlet var expense_budget_lbl: UILabel!
     @IBOutlet var expense_date_lbl: UILabel!
@@ -17,6 +16,9 @@ class ExpenseTableViewCell: UITableViewCell {
     @IBOutlet var expense_due_lbl: UILabel!
     @IBOutlet var progressBar: CircularProgressBarView!
     
+    @IBOutlet var expense_notes_icon: UIView!
+    var cellDelegate: ExpenseTableViewCellDelegate?
+    var notes: String = "Not Available"
     let calculations: Calculation = Calculation()
     override func awakeFromNib() {
        
@@ -31,8 +33,8 @@ class ExpenseTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func commonInit1(_ expenseName: String, expenseAmount: Double, expense_date: String, expense_reminder: Bool, occurance: String, categoryBudget: Double, color:String) {
-        
+    func commonInit1(_ expenseName: String, expenseAmount: Double, expense_date: String, expense_reminder: Bool, occurance: String, categoryBudget: Double, color:String, notes:String) {
+        expense_notes_icon.tintColor = UIColor(hexString: color)
         expense_name_lbl.text = expenseName
         expense_budget_lbl.text = "\(expenseAmount)£"
         expense_date_lbl.text = expense_date
@@ -51,12 +53,16 @@ class ExpenseTableViewCell: UITableViewCell {
         
         
         let progress = (Float(expenseAmount)/Float(categoryBudget))*1.0
-        print("Shajeeth\(progress)")
         self.progressBar.setProgressWithAnimation(progress: progress)
+        
+        self.notes = notes
     }
     
+    @IBAction func openNotes(_ sender: UIButton) {
+        self.cellDelegate?.viewNotes(cell: self, sender: sender as! UIButton, data: notes)
+    }
 }
 
 protocol ExpenseTableViewCellDelegate {
-    func customCell(cell: ExpenseTableViewCell, sender button: UIButton, data: String)
+    func viewNotes(cell: ExpenseTableViewCell, sender button: UIButton, data: String)
 }

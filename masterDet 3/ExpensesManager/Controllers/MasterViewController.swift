@@ -17,10 +17,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
 //        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
 //        navigationItem.rightBarButtonItem = addButton
-        if let split = splitViewController {
-            let controllers = split.viewControllers
-            detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
-        }
+//        if let split = splitViewController {
+//            let controllers = split.viewControllers
+//            detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+//        }
         
         let nibName = UINib(nibName: "CategoryTableViewCell", bundle: nil)
         tableView.register(nibName, forCellReuseIdentifier: "categoryCell")

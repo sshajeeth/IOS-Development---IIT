@@ -4,7 +4,9 @@ import UIKit
 import CoreData
 import Charts
 
-class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedResultsControllerDelegate, UITableViewDelegate{
+class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedResultsControllerDelegate, UITableViewDelegate, UIPopoverPresentationControllerDelegate{
+  
+    
     
     
     
@@ -15,192 +17,245 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
     @IBOutlet var budget_lbl: UILabel!
     @IBOutlet var amount_lbl: UILabel!
     @IBOutlet var remaining_lbl: UILabel!
+    @IBOutlet var editBtn: UIBarButtonItem!
     
     let calculations: Calculation = Calculation()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var detailViewController: DetailViewController? = nil
+    var managedObjectContext: NSManagedObjectContext? = nil
+    var detailItem: ExpensesCategory?
+//        didSet{
+//            configureView()
+//        }
+//    }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureView()
+//        expensesTable.dataSource = self
+        let nibName = UINib(nibName: "ExpenseTableViewCell", bundle: nil)
+        expensesTable.register(nibName, forCellReuseIdentifier: "expenseCell")
+        self.configureView()
+        self.setupPieChart()
+    }
     
-    
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        if (self.detailItem != nil){
-            let sectionInfo = self._fetchResultsController.sections![section] as NSFetchedResultsSectionInfo
-            return sectionInfo.numberOfObjects
-        }else{
-            return 1
+        // Set the default selected row
+        let indexPath = IndexPath(row: 0, section: 0)
+        if expensesTable.hasRowAtIndexPath(indexPath: indexPath as NSIndexPath) {
+            expensesTable.selectRow(at: indexPath, animated: true, scrollPosition: .bottom)
+        }
+        
+    }
+    
+    func configureView() {
+        if let category = detailItem{
+            
+                let expenses = (category.expenses!.allObjects as! [Expenses])
+
+                let totalExpenses = calculations.calculate_total_expenses(expenses)
+                progressBar.trackColor = UIColor(hexString: "#e3e3e3")
+//                            print(categoryColor)
+                progressBar.progressColor = UIColor(hexString: (category.color)!)
+                progressBar.setProgressWithAnimation(progress: (totalExpenses/Float(category.budget))*1.0)
+
+                category_name_lbl.text = category.name
+                budget_lbl.text = String(category.budget)
+                amount_lbl.text = String(totalExpenses)
+                var remaining = category.budget-Double(totalExpenses)
+
+                if remaining<0{
+                    remaining_lbl.text = String(remaining)
+                    remaining_lbl.textColor = UIColor(hexString: "#d9170d")
+                } else if remaining>0{
+                    remaining_lbl.text = String(remaining)
+                    remaining_lbl.textColor = UIColor(hexString: "#47cc04")
+                }else {
+                    remaining_lbl.text = String(remaining)
+                    remaining_lbl.textColor = UIColor(hexString: "#0483cc")
+//                }
+            }
+            setupPieChart()
+            expensesTable.reloadData()
+            
+            
         }
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        if (self.detailItem != nil){
-            return self._fetchResultsController.sections?.count ?? 1
-            
-        }else{
-            return 1
+    // MARK: - Segues
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier {
+            switch identifier{
+            case "addExpense":
+                if let category = self.detailItem{
+                    let destVC = (segue.destination as! UINavigationController).topViewController as! AddEditExpenseViewController
+                    destVC.detailItem = category
+                }
+                
+            case "editExpense":
+                if let indexPath = expensesTable.indexPathForSelectedRow {
+                    let object = _fetchedResultsController!.object(at: indexPath)
+                    let controller = (segue.destination as! UINavigationController).topViewController as! AddEditExpenseViewController
+                    controller.editingExpense = object as Expenses
+                    controller.detailItem = detailItem
+                }
+            default:
+                break
+            }
         }
     }
+    
+    
+//    MARK: - Table View
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return fetchedResultsController.sections?.count ?? 0
+       
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let sectionInfo = fetchedResultsController.sections![section]
+        if sectionInfo.numberOfObjects == 0 {
+            editBtn.isEnabled = false
+            expensesTable.setEmptyMessage("No Expenses Available for this Category.", UIColor.black)
+        }
+        
+        return sectionInfo.numberOfObjects
+    }
+    
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "expenseCell", for: indexPath) as! ExpenseTableViewCell
-        //        let event = _fetchedResultsController!.object(at: indexPath)
-        //        configureCell(cell as! CategoryTableViewCell, withEvent: event)
-        //        configureCell(cell as! CategoryTableViewCell, withEvent: event)
         configureCell(cell, indexPath: indexPath)
-        //        cell.cellDelegate = self
+        cell.cellDelegate = self
         return cell
     }
     
-    
-    
-    var detailItem: ExpensesCategory?
-    
-    
-    
-    //    MARK: - Fetched results controller
-    
-    var _fetchedResultsController: NSFetchedResultsController<Expenses>? = nil
-    
-    var _fetchResultsController: NSFetchedResultsController<Expenses> {
-        if _fetchedResultsController != nil{
-            return _fetchedResultsController!
-        }
-        let fetchRequest: NSFetchRequest<Expenses> = Expenses.fetchRequest()
-        
-        // Set the batch size to a suitable number.
-        fetchRequest.fetchBatchSize = 20
-        
-        // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
-        
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        let predicate = NSPredicate(format: "category = %@", detailItem as! ExpensesCategory)
-        fetchRequest.predicate = predicate
-        
-        let aFetchedResultsController = NSFetchedResultsController<Expenses>(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: #keyPath(Expenses.expense_category), cacheName: "\(UUID().uuidString)-category")
-        aFetchedResultsController.delegate = self
-        _fetchedResultsController = aFetchedResultsController
-        // Edit the section name key path and cache name if appropriate.
-        // nil for section name key path means "no sections".
-        
-        
-        do {
-            try _fetchedResultsController!.performFetch()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nserror = error as NSError
-            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-        return _fetchedResultsController!
-    }
-    
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        expensesTable.beginUpdates()
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        return true
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
-            context.delete(_fetchResultsController.object(at: indexPath))
+            context.delete(fetchedResultsController.object(at: indexPath))
             
             do {
                 try context.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
     }
     
+//    MARK: - Cell Configurations
     func configureCell(_ cell: ExpenseTableViewCell, indexPath: IndexPath) {
-        
         if(self.detailItem != nil){
-            let name = (self._fetchedResultsController?.fetchedObjects?[indexPath.row].name)!
-            let expense = (self._fetchedResultsController?.fetchedObjects?[indexPath.row].amount)!
-            let date = self._fetchedResultsController?.fetchedObjects?[indexPath.row].date
-            let reminder = self._fetchedResultsController?.fetchedObjects?[indexPath.row].reminder
-            let occurance = self._fetchedResultsController?.fetchedObjects?[indexPath.row].ocurance
+            let name = (self.fetchedResultsController.fetchedObjects?[indexPath.row].name)!
+            let expense = (self.fetchedResultsController.fetchedObjects?[indexPath.row].amount)!
+            let date = self.fetchedResultsController.fetchedObjects?[indexPath.row].date
+            let reminder = self.fetchedResultsController.fetchedObjects?[indexPath.row].reminder
+            let occurance = self.fetchedResultsController.fetchedObjects?[indexPath.row].ocurance
+            let notes = self.fetchedResultsController.fetchedObjects?[indexPath.row].notes
             let categoryBudget = (self.detailItem?.budget)!
             let color = self.detailItem?.color
-            cell.commonInit1(name, expenseAmount: Double(expense), expense_date: date!, expense_reminder: reminder!, occurance: occurance!, categoryBudget: Double(categoryBudget),color: color!)
-            
-        }
-        //
-    }
-    
-    //    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
-    //        switch type {
-    //        case .insert:
-    //            expensesTable.insertSections(IndexSet(integer: sectionIndex), with: .fade)
-    //        case .delete:
-    //            expensesTable.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
-    //        default:
-    //            return
-    //        }
-    //    }
-    
-    //    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-    //        switch type {
-    //            case .insert:
-    //                expensesTable.insertRows(at: [newIndexPath!], with: .fade)
-    //            case .delete:
-    //                expensesTable.deleteRows(at: [indexPath!], with: .fade)
-    //            case .update:
-    //                configureCell(expensesTable.cellForRow(at: indexPath!)! as! ExpenseTableViewCell, indexPath: indexPath!.se)
-    ////                configureCell(expensesTable.cellForRow(at: indexPath!)! as! ExpenseTableViewCell, indexPath: indexPath!)
-    //            case .move:
-    //                configureCell(expensesTable.cellForRow(at: indexPath!)! as! ExpenseTableViewCell, indexPath: indexPath!)
-    //            default:
-    //                return
-    //        }
-    //    }
-    
-    
-    
-    
-    
-    func configureView() {
-        if let category = detailItem{
-            let expenses = (category.expenses!.allObjects as! [Expenses])
-            
-            let totalExpenses = calculations.calculate_total_expenses(expenses)
-            progressBar.trackColor = UIColor(hexString: "#e3e3e3")
-            //            print(categoryColor)
-            progressBar.progressColor = UIColor(hexString: (category.color)!)
-            progressBar.setProgressWithAnimation(progress: (totalExpenses/Float(category.budget))*1.0)
-            
-            category_name_lbl.text = category.name
-            budget_lbl.text = String(category.budget)
-            amount_lbl.text = String(totalExpenses)
-            var remaining = category.budget-Double(totalExpenses)
-            
-            if remaining<0{
-                remaining_lbl.text = String(remaining)
-                remaining_lbl.textColor = UIColor(hexString: "#d9170d")
-            } else if remaining>0{
-                remaining_lbl.text = String(remaining)
-                remaining_lbl.textColor = UIColor(hexString: "#47cc04")
-            }else {
-                remaining_lbl.text = String(remaining)
-                remaining_lbl.textColor = UIColor(hexString: "#0483cc")
-            }
-            
-            
+            cell.commonInit1(name, expenseAmount: Double(expense), expense_date: date!, expense_reminder: reminder!, occurance: occurance!, categoryBudget: Double(categoryBudget),color: color!, notes:notes!)
             
         }
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        expensesTable.dataSource = self
-        let nibName = UINib(nibName: "ExpenseTableViewCell", bundle: nil)
-        expensesTable.register(nibName, forCellReuseIdentifier: "expenseCell")
-        self.configureView()
-        self.setupPieChart()
+    
+    
+    
+    
+    
+    //    MARK: - Fetched results controller
+    
+    var _fetchedResultsController: NSFetchedResultsController<Expenses>? = nil
+     
+    var fetchedResultsController: NSFetchedResultsController<Expenses> {
+        if _fetchedResultsController != nil{
+            return _fetchedResultsController!
+        }
+//        build the fetch request
+        let fetchRequest: NSFetchRequest<Expenses> = Expenses.fetchRequest()
+        
+//        add a sort descriptor
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
+        
+//        add the sort to request
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+//        add the predicate
+        if detailItem != nil{
+        let predicate = NSPredicate(format: "category = %@", self.detailItem!)
+        fetchRequest.predicate = predicate
+        }
+        
+//        intatiate the results
+        let aFetchedResultsController = NSFetchedResultsController<Expenses>(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: #keyPath(Expenses.expense_category), cacheName: nil)
+        
+//        set the delegate
+        aFetchedResultsController.delegate = self
+        
+        _fetchedResultsController = aFetchedResultsController
+        
+//        perform fetch
+        do {
+            try _fetchedResultsController!.performFetch()
+        } catch {
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+        return _fetchedResultsController!
     }
+    
+
+    
+//    MARK: - Table Editing - fetch controller delegate functions
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>){
+        expensesTable.beginUpdates()
+    }
+    
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>){
+        expensesTable.endUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType){
+        switch type {
+        case .insert:
+            expensesTable.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+        case .delete:
+            expensesTable.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+        default:
+            return
+        }
+        
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?){
+        switch type {
+        case .insert:
+            expensesTable.insertRows(at: [newIndexPath!], with: .fade)
+        case .delete:
+            expensesTable.deleteRows(at: [indexPath!], with: .fade)
+        case .move:
+            configureCell(expensesTable.cellForRow(at: indexPath!) as! ExpenseTableViewCell, indexPath: newIndexPath!)
+            expensesTable.moveRow(at: indexPath!, to: newIndexPath!)
+        case .update:
+            configureCell(expensesTable.cellForRow(at: indexPath!) as! ExpenseTableViewCell, indexPath: newIndexPath!)
+        }
+        configureView()
+        
+    }
+    
+    
+    
+    
     
     func setupPieChart(){
         pieChart.chartDescription!.enabled = false
@@ -237,60 +292,34 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
         // Dispose of any resources that can be recreated.
     }
     
-    
-    
-    
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    func showPopoverFrom(cell: ExpenseTableViewCell, forButton button: UIButton, forNotes notes: String) {
+        let buttonFrame = button.frame
+        var showRect = cell.convert(buttonFrame, to: expensesTable)
+        showRect = expensesTable.convert(showRect, to: view)
+        showRect.origin.y -= 5
         
-        // Set the default selected row
-        let indexPath = IndexPath(row: 0, section: 0)
-        if expensesTable.hasRowAtIndexPath(indexPath: indexPath as NSIndexPath) {
-            expensesTable.selectRow(at: indexPath, animated: true, scrollPosition: .bottom)
-        }
-    }
-    
-    // MARK: - Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let identifier = segue.identifier {
-            switch identifier{
-            //            case "categoryDeatils":
-            //                let destVC = segue.destination as! CategoryDetailController
-            //
-            //                if let name = self.detailItem?.name{
-            //                    destVC.categoryName = name
-            //                }
-            //
-            //                if let budget = self.detailItem?.budget{
-            //                    destVC.categoryTotalBudget = Float(budget)
-            //                }
-            //
-            //                if let color = self.detailItem?.color{
-            //                    destVC.categoryColor = color
-            //                }
+        let controller = self.storyboard?.instantiateViewController(withIdentifier: "NotesPopoverController") as? NotesPopoverController
+        controller?.modalPresentationStyle = .popover
+        controller?.preferredContentSize = CGSize(width: 300, height: 250)
+        controller?.notes = notes
+        
+        if let popoverPresentationController = controller?.popoverPresentationController {
+            popoverPresentationController.permittedArrowDirections = .up
+            popoverPresentationController.sourceView = self.view
+            popoverPresentationController.sourceRect = showRect
             
-            
-            case "addExpense":
-                if let category = self.detailItem{
-                    let destVC = (segue.destination as! UINavigationController).topViewController as! AddEditExpenseViewController
-                    destVC.detailItem = category
-                }
-                
-            case "editExpense":
-                if let indexPath = expensesTable.indexPathForSelectedRow {
-                    let object = _fetchedResultsController!.object(at: indexPath)
-                    let controller = (segue.destination as! UINavigationController).topViewController as! AddEditExpenseViewController
-                    controller.editingExpense = object as Expenses
-                }
-                
-            default:
-                break
+            if let popoverController = controller {
+                present(popoverController, animated: true, completion: nil)
             }
         }
     }
     
-    
+
+}
+
+extension DetailViewController: ExpenseTableViewCellDelegate {
+    func viewNotes(cell: ExpenseTableViewCell, sender button: UIButton, data: String) {
+        self.showPopoverFrom(cell: cell, forButton: button, forNotes: data)
+    }
 }
 

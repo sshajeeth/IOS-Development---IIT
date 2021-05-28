@@ -10,7 +10,7 @@ import UIKit
 import EventKit
 import CoreData
 
-class AddEditExpenseViewController: UIViewController {
+class AddEditExpenseViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var expense_category_lbl: UILabel!
     @IBOutlet var expense_name_tf: UITextField!
     @IBOutlet var expense_amount_tf: UITextField!
@@ -20,6 +20,7 @@ class AddEditExpenseViewController: UIViewController {
     @IBOutlet var expense_reminder_occurance_segment: UISegmentedControl!
     @IBOutlet var expense_save_btn: UIBarButtonItem!
     
+    var expenses: [NSManagedObject] = []
     var detailItem:ExpensesCategory?
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -41,6 +42,13 @@ class AddEditExpenseViewController: UIViewController {
         super.viewDidLoad()
         expense_category_lbl.text = detailItem?.name
         // Do any additional setup after loading the view.
+        if !editingMode {
+            // Settings the placeholder for notes UITextView
+            expense_notes_tv.delegate = self
+            expense_notes_tv.text = "Notes"
+            expense_notes_tv.textColor = UIColor.lightGray
+            
+        }
         configureView()
     }
     
@@ -51,23 +59,24 @@ class AddEditExpenseViewController: UIViewController {
         
         if let expense = editingExpense{
             if let expenseName = expense_name_tf{
-                expenseName.text = editingExpense?.name
+                expenseName.text = expense.name
             }
             if let expenseAmount = expense_amount_tf{
-                var expenseBudget = String(format: "%.2f", editingExpense?.amount as! CVarArg)
+                var expenseBudget = String(format: "%.2f", expense.amount as! CVarArg)
                 
                 expenseAmount.text = expenseBudget
             }
             if let expenseNotes = expense_notes_tv{
-                expenseNotes.text = editingExpense?.notes
+                expenseNotes.text = expense.notes
             }
-//            if let expenseDate = expense_date_picker{
-//                let finalDate = self.convertStringDateToDate(date: (editingExpense?.date)!)
-//                expenseDate.setDate(finalDate, animated: true)
-//            }
+            if let expenseDate = expense_date_picker{
+                let dateFormatr = DateFormatter()
+                dateFormatr.dateFormat = "dd MMMM, h:mm a"
+                expenseDate.date = dateFormatr.date(from: expense.date!)!
+            }
             
             if let expenseReminder = expense_reminder_toggle{
-                if editingExpense?.reminder == true{
+                if expense.reminder == true{
                     expenseReminder.setOn(true, animated: true)
                 }else {
                     expenseReminder.setOn(false, animated: true)
@@ -75,15 +84,15 @@ class AddEditExpenseViewController: UIViewController {
             }
             
             if let expenseOccurance = expense_reminder_occurance_segment{
-                let occurance = editingExpense?.ocurance
+                let occurance = expense.ocurance
                 if occurance == "Never"{
-                    expenseOccurance.setEnabled(true, forSegmentAt: 0)
+                    expenseOccurance.selectedSegmentIndex = 0
                 }else if occurance == "Daily"{
-                    expenseOccurance.setEnabled(true, forSegmentAt: 1)
+                    expenseOccurance.selectedSegmentIndex = 1
                 }else if occurance == "Weekly"{
-                    expenseOccurance.setEnabled(true, forSegmentAt: 2)
+                    expenseOccurance.selectedSegmentIndex = 2
                 }else if occurance == "Monthly"{
-                    expenseOccurance.setEnabled(true, forSegmentAt: 3)
+                    expenseOccurance.selectedSegmentIndex = 3
                 }
                 
             }
@@ -93,6 +102,7 @@ class AddEditExpenseViewController: UIViewController {
         
     }
     @IBAction func saveExpense(_ sender: UIBarButtonItem) {
+        if validateFields(){
         let entity = NSEntityDescription.entity(forEntityName: "Expenses", in: context)!
         var expense = NSManagedObject()
         
@@ -119,7 +129,13 @@ class AddEditExpenseViewController: UIViewController {
         
         detailItem?.addToExpenses((expense as? Expenses)!)
         (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        expenses.append(expense)
         self.dismissPopUp()
+        }else{
+            let alert = UIAlertController(title: "Error", message: "Please fill the required fields.", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     @IBAction func cancelExpense(_ sender: UIBarButtonItem) {
         self.dismissPopUp()
@@ -130,18 +146,36 @@ class AddEditExpenseViewController: UIViewController {
         let dateFormatr = DateFormatter()
         dateFormatr.dateFormat = "dd MMMM, h:mm a"
         strDate = dateFormatr.string(from: (expense_date_picker?.date)!)
-        print(strDate)
-        
-        
-        //        strDate = dateFormatter.string(from: expense_date_picker.date)
     }
     
+   
     
-    func convertStringDateToDate(date: String) -> Date{
-        let dateFormatter = DateFormatter()
-        let final_date = dateFormatter.date(from: date)
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
         
-        return final_date!
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Notes"
+            textView.textColor = UIColor.lightGray
+        }
+        
+    }
+    
+    func validateFields() -> Bool {
+        if !(expense_name_tf.text!.isEmpty) && !(expense_amount_tf.text!.isEmpty){
+            return true
+        }else{
+            return false
+        }
     }
     
     
@@ -151,12 +185,10 @@ class AddEditExpenseViewController: UIViewController {
     
     @IBAction func handleExpenseReminderToggle(_ sender: Any) {
         if expense_reminder_toggle.isOn{
-            print("Switch ON")
             reminder = true
             expense_reminder_occurance_segment.isUserInteractionEnabled = true
         }else{
             reminder = false
-            print("Switch OFF")
             expense_reminder_occurance_segment.isUserInteractionEnabled = false
         }
     }

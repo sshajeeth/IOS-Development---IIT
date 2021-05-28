@@ -174,6 +174,7 @@
                         <outlet property="amount_lbl" destination="dXd-Bc-Gbd" id="WFp-Ug-DBP"/>
                         <outlet property="budget_lbl" destination="xiv-lp-jov" id="9Y4-3g-UU3"/>
                         <outlet property="category_name_lbl" destination="NRJ-4k-W1g" id="2iG-BJ-l2B"/>
+                        <outlet property="editBtn" destination="uwW-xN-bUj" id="ko0-TM-ZPl"/>
                         <outlet property="expensesTable" destination="GlH-UN-tS3" id="NwQ-4s-B9n"/>
                         <outlet property="pieChart" destination="imx-Tn-h27" id="zCC-WG-V5O"/>
                         <outlet property="progressBar" destination="QxF-IW-M3b" id="ZnJ-4h-Q8V"/>
@@ -183,36 +184,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="708.3984375" y="128.125"/>
-        </scene>
-        <!--Category Detail Controller-->
-        <scene sceneID="kDN-u7-W5h">
-            <objects>
-                <viewController id="R4b-M6-rtG" customClass="CategoryDetailController" customModule="ExpensesManager" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="roN-RH-AhH">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="opR-ZC-CBQ" customClass="CircularProgressBarView" customModule="ExpensesManager" customModuleProvider="target">
-                                <rect key="frame" x="259" y="36" width="144" height="128"/>
-                                <color key="backgroundColor" systemColor="systemGray3Color"/>
-                            </view>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="r5t-it-Fwl"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="opR-ZC-CBQ" firstAttribute="leading" secondItem="r5t-it-Fwl" secondAttribute="leading" constant="259" id="CI0-c2-wl4"/>
-                            <constraint firstItem="opR-ZC-CBQ" firstAttribute="centerX" secondItem="roN-RH-AhH" secondAttribute="centerX" id="Csw-4c-Z1o"/>
-                            <constraint firstItem="opR-ZC-CBQ" firstAttribute="top" secondItem="r5t-it-Fwl" secondAttribute="top" constant="36" id="L3c-Qg-jJ2"/>
-                            <constraint firstItem="opR-ZC-CBQ" firstAttribute="centerY" secondItem="roN-RH-AhH" secondAttribute="centerY" id="VYV-1K-zoH"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="category_progress_view" destination="opR-ZC-CBQ" id="4wL-5d-eE9"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hzD-p4-VCy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="669.7265625" y="859.765625"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="Nki-YV-4Qg">
@@ -651,36 +622,46 @@
         <!--Notes Popover Controller-->
         <scene sceneID="hur-cb-eG6">
             <objects>
-                <viewController id="9qk-go-MLI" customClass="NotesPopoverController" customModule="ExpensesManager" customModuleProvider="target" sceneMemberID="viewController">
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P4z-Wd-2Pv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <viewController storyboardIdentifier="NotesPopoverController" id="9qk-go-MLI" customClass="NotesPopoverController" customModule="ExpensesManager" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YMS-VI-FuQ">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <rect key="frame" x="0.0" y="0.0" width="300" height="250"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="u45-BX-Fzi">
-                                <rect key="frame" x="40" y="35" width="240" height="128"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <color key="textColor" systemColor="labelColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tpu-YJ-Wco">
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="49"/>
+                                <items>
+                                    <navigationItem title="Notes" id="gDO-4N-xhh"/>
+                                </items>
+                            </navigationBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gs9-s2-rdu">
+                                <rect key="frame" x="16" y="55" width="268" height="141"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="2nC-BD-T7H"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="u45-BX-Fzi" firstAttribute="top" secondItem="2nC-BD-T7H" secondAttribute="top" constant="22" id="DFl-Lv-IMq"/>
-                            <constraint firstItem="u45-BX-Fzi" firstAttribute="centerY" secondItem="YMS-VI-FuQ" secondAttribute="centerY" id="b1D-AA-LfT"/>
-                            <constraint firstItem="u45-BX-Fzi" firstAttribute="centerX" secondItem="YMS-VI-FuQ" secondAttribute="centerX" id="dwL-Ti-bx7"/>
-                            <constraint firstItem="u45-BX-Fzi" firstAttribute="leading" secondItem="2nC-BD-T7H" secondAttribute="leading" constant="40" id="lOD-Qq-eo4"/>
+                            <constraint firstItem="gs9-s2-rdu" firstAttribute="trailing" secondItem="YMS-VI-FuQ" secondAttribute="trailingMargin" id="7Lu-d0-21O"/>
+                            <constraint firstItem="gs9-s2-rdu" firstAttribute="top" secondItem="tpu-YJ-Wco" secondAttribute="bottom" constant="5" id="7p5-JH-fud"/>
+                            <constraint firstItem="tpu-YJ-Wco" firstAttribute="top" secondItem="2nC-BD-T7H" secondAttribute="top" id="cH8-nP-zPD"/>
+                            <constraint firstItem="tpu-YJ-Wco" firstAttribute="leading" secondItem="2nC-BD-T7H" secondAttribute="leading" id="g0g-7h-mrf"/>
+                            <constraint firstItem="gs9-s2-rdu" firstAttribute="centerX" secondItem="tpu-YJ-Wco" secondAttribute="centerX" id="khT-7e-DPb"/>
+                            <constraint firstItem="gs9-s2-rdu" firstAttribute="leading" secondItem="YMS-VI-FuQ" secondAttribute="leadingMargin" id="oR9-et-8sa"/>
+                            <constraint firstItem="2nC-BD-T7H" firstAttribute="bottom" secondItem="gs9-s2-rdu" secondAttribute="bottom" constant="54" id="rSf-zB-5w5"/>
+                            <constraint firstItem="gs9-s2-rdu" firstAttribute="centerY" secondItem="YMS-VI-FuQ" secondAttribute="centerY" id="rf7-fW-6MM"/>
                         </constraints>
                     </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="300" height="250"/>
                     <connections>
-                        <outlet property="notesTextView" destination="u45-BX-Fzi" id="xde-Cn-wpp"/>
+                        <outlet property="notes_label" destination="gs9-s2-rdu" id="joq-ey-nME"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="P4z-Wd-2Pv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1293" y="856"/>
+            <point key="canvasLocation" x="807.421875" y="679.6875"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
@@ -697,9 +678,6 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGray3Color">
-            <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray6Color">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
