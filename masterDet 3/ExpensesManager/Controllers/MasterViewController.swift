@@ -8,7 +8,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
-
+    var key = "addedDate"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,6 +71,12 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             self.performSegue(withIdentifier: "showDetail", sender: object)
         }
     }
+    
+    @IBAction func alphabaticSort(_ sender: UIBarButtonItem) {
+        key = "name"
+    }
+    
+    
     // MARK: - Segues
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -140,7 +146,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             }
         }
     }
-
+    
     func configureCell(_ cell: CategoryTableViewCell, withEvent event: ExpensesCategory) {
 //        cell.textLabel!.text = event.name
         cell.commonInit(event.name!, categoryBudget: Double(event.budget), categoryNotes: event.notes!)
@@ -148,7 +154,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     // MARK: - Fetched results controller
-
+    
     var fetchedResultsController: NSFetchedResultsController<ExpensesCategory> {
         if _fetchedResultsController != nil {
             return _fetchedResultsController!
@@ -160,9 +166,16 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        if key=="name"{
+            let sortDescriptor = NSSortDescriptor(key: "name", ascending: false)
+            fetchRequest.sortDescriptors = [sortDescriptor]
+        }else if key == "addedDate"{
+            let sortDescriptor = NSSortDescriptor(key: "addedDate", ascending: false)
+            fetchRequest.sortDescriptors = [sortDescriptor]
+        }
         
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        
         
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".

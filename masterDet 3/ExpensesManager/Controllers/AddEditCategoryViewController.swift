@@ -88,7 +88,8 @@ class AddEditCategoryViewController: UIViewController, UITextViewDelegate {
         
         
         self.dismissPopUp()
-        
+        let date = NSDate()
+        category.setValue(date, forKey: "addedDate")
         }else{
             let alert = UIAlertController(title: "Error", message: "Please fill the required fields.", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))

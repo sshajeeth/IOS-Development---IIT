@@ -228,7 +228,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Categories" id="Zdf-7t-Un8">
-                        <barButtonItem key="leftBarButtonItem" title="Sort" id="HTk-zw-LBX"/>
+                        <barButtonItem key="leftBarButtonItem" title="Sort" id="HTk-zw-LBX">
+                            <connections>
+                                <action selector="alphabaticSort:" destination="7bK-jq-Zjz" id="r9A-om-JSv"/>
+                            </connections>
+                        </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem title="Item" image="plus" catalog="system" id="IsN-aj-kvd">
                                 <connections>
