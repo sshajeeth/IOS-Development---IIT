@@ -65,6 +65,7 @@ class CircularProgressBarView: UIView {
         progressLayer.strokeEnd = CGFloat(progress)
 //        trackLayer.strokeEnd = CGFloat(track)
         progressLayer.add(animation, forKey: "animateprogress")
+        
     }
 
 }

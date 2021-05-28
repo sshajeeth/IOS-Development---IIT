@@ -48,8 +48,8 @@ class Calculation{
             finalExpenses.append(PieChartDataEntry(value: sortedExpenses[2].amount, label: sortedExpenses[2].name))
             finalExpenses.append(PieChartDataEntry(value: sortedExpenses[3].amount, label: sortedExpenses[3].name))
             
-            for i in 3..<sortedExpenses.count{
-                
+            for i in 4..<sortedExpenses.count{
+                print(i)
                 final_expense += expenses[i].amount
             }
             finalExpenses.append(PieChartDataEntry(value: final_expense, label: "Other Expenses"))

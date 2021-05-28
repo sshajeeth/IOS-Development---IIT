@@ -267,6 +267,7 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
         pieChart.legend.horizontalAlignment = .center
 //        pieChart.legend.orientation = .vertical
         
+        pieChart.sizeToFit()
         if let category = detailItem{
             let expenses = (category.expenses!.allObjects as! [Expenses])
             let entities = calculations.calculationOfPieChart(expenses)
