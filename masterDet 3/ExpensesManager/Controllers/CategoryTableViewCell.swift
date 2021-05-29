@@ -1,11 +1,3 @@
-//
-//  CategoryTableViewCell.swift
-//  ExpensesManager
-//
-//  Created by Shajeeth Suwarnarajah on 2021-05-21.
-//  Copyright © 2021 Philip Trwoga. All rights reserved.
-//
-
 import UIKit
 
 class CategoryTableViewCell: UITableViewCell {
@@ -22,13 +14,13 @@ class CategoryTableViewCell: UITableViewCell {
         // Initialization code
         
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
-
+    
     
     func commonInit(_ categoryName: String, categoryBudget: Double, categoryNotes: String) {
         

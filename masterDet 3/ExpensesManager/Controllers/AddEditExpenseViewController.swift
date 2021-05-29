@@ -1,11 +1,3 @@
-//
-//  AddEditExpenseViewController.swift
-//  ExpensesManager
-//
-//  Created by Shajeeth Suwarnarajah on 2021-05-21.
-//  Copyright © 2021 Philip Trwoga. All rights reserved.
-//
-
 import UIKit
 import EventKit
 import CoreData
@@ -37,11 +29,10 @@ class AddEditExpenseViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    //    let ekrules: EKRecurrenceRule
     override func viewDidLoad() {
         super.viewDidLoad()
         expense_category_lbl.text = detailItem?.name
-        // Do any additional setup after loading the view.
+        
         if !editingMode {
             // Settings the placeholder for notes UITextView
             expense_notes_tv.delegate = self
@@ -101,42 +92,45 @@ class AddEditExpenseViewController: UIViewController, UITextViewDelegate {
         }
         
     }
+    
     @IBAction func saveExpense(_ sender: UIBarButtonItem) {
         if validateFields(){
-        let entity = NSEntityDescription.entity(forEntityName: "Expenses", in: context)!
-        var expense = NSManagedObject()
-        
-        if editingMode {
-            expense = (editingExpense as? Expenses)!
-        } else {
-            expense = NSManagedObject(entity: entity, insertInto: context)
-        }
-        
-        expense.setValue(expense_name_tf.text, forKey: "name")
-        expense.setValue(Double(expense_amount_tf.text!), forKey: "amount")
-        expense.setValue(expense_name_tf.text, forKey: "notes")
-        expense.setValue(self.strDate, forKey: "date")
-        expense.setValue(self.reminder, forKey: "reminder")
-        expense.setValue(self.occurance, forKey: "ocurance")
-        expense.setValue(detailItem?.name, forKey: "expense_category")
-        expense.setValue(expense_name_tf.text, forKey: "name")
-        
-
-        
-        if self.reminder == true{
-            self.addReminder(eventTitle: expense_name_tf.text! , eventStartDate: expense_date_picker.date, eventNotes: expense_notes_tv.text!)
-        }
-        
-        detailItem?.addToExpenses((expense as? Expenses)!)
-        (UIApplication.shared.delegate as! AppDelegate).saveContext()
-        expenses.append(expense)
-        self.dismissPopUp()
+            let entity = NSEntityDescription.entity(forEntityName: "Expenses", in: context)!
+            var expense = NSManagedObject()
+            
+            if editingMode {
+                expense = (editingExpense as? Expenses)!
+            } else {
+                expense = NSManagedObject(entity: entity, insertInto: context)
+            }
+            
+            expense.setValue(expense_name_tf.text, forKey: "name")
+            expense.setValue(Double(expense_amount_tf.text!), forKey: "amount")
+            expense.setValue(expense_name_tf.text, forKey: "notes")
+            expense.setValue(self.strDate, forKey: "date")
+            expense.setValue(self.reminder, forKey: "reminder")
+            expense.setValue(self.occurance, forKey: "ocurance")
+            expense.setValue(detailItem?.name, forKey: "expense_category")
+            expense.setValue(expense_name_tf.text, forKey: "name")
+            
+            
+            
+            if self.reminder == true{
+                self.addReminder(eventTitle: expense_name_tf.text! , eventStartDate: expense_date_picker.date, eventNotes: expense_notes_tv.text!)
+            }
+            
+            detailItem?.addToExpenses((expense as? Expenses)!)
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            expenses.append(expense)
+            self.dismissPopUp()
         }else{
             let alert = UIAlertController(title: "Error", message: "Please fill the required fields.", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }
+    
+    
     @IBAction func cancelExpense(_ sender: UIBarButtonItem) {
         self.dismissPopUp()
     }
@@ -148,7 +142,7 @@ class AddEditExpenseViewController: UIViewController, UITextViewDelegate {
         strDate = dateFormatr.string(from: (expense_date_picker?.date)!)
     }
     
-   
+    
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == UIColor.lightGray {
@@ -177,11 +171,6 @@ class AddEditExpenseViewController: UIViewController, UITextViewDelegate {
             return false
         }
     }
-    
-    
-    
-    
-    
     
     @IBAction func handleExpenseReminderToggle(_ sender: Any) {
         if expense_reminder_toggle.isOn{
@@ -216,6 +205,7 @@ class AddEditExpenseViewController: UIViewController, UITextViewDelegate {
         }
     }
     
+    //    MARK: - Create Event in Calender
     func addReminder(eventTitle: String, eventStartDate:Date, eventNotes: String) {
         let eventStore:EKEventStore = EKEventStore()
         eventStore.requestAccess(to: .event){ (granted, error) in
@@ -254,15 +244,5 @@ class AddEditExpenseViewController: UIViewController, UITextViewDelegate {
         popoverPresentationController?.delegate?.popoverPresentationControllerDidDismissPopover?(popoverPresentationController!)
     }
     
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
 }

@@ -12,7 +12,6 @@
 		4A1ADD792659514E0079BCD7 /* Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1ADD782659514E0079BCD7 /* Calculations.swift */; };
 		4A1ADD7C2659B1970079BCD7 /* ExpenseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1ADD7A2659B1970079BCD7 /* ExpenseTableViewCell.swift */; };
 		4A1ADD7D2659B1970079BCD7 /* ExpenseTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4A1ADD7B2659B1970079BCD7 /* ExpenseTableViewCell.xib */; };
-		4ADE65682656CB8200DACB98 /* CategoryDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADE65672656CB8200DACB98 /* CategoryDetailController.swift */; };
 		4AE010542659B3EE003B233C /* AddEditExpenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE010532659B3EE003B233C /* AddEditExpenseViewController.swift */; };
 		4AF7E14626582A8F000CA89A /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF7E14526582A8F000CA89A /* UITableView.swift */; };
 		4AFBABD92656E13100EBE4D4 /* AddEditCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFBABD82656E13100EBE4D4 /* AddEditCategoryViewController.swift */; };
@@ -37,7 +36,6 @@
 		4A1ADD782659514E0079BCD7 /* Calculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculations.swift; sourceTree = "<group>"; };
 		4A1ADD7A2659B1970079BCD7 /* ExpenseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ExpenseTableViewCell.swift; path = ../Views/ExpenseTableViewCell.swift; sourceTree = "<group>"; };
 		4A1ADD7B2659B1970079BCD7 /* ExpenseTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExpenseTableViewCell.xib; sourceTree = "<group>"; };
-		4ADE65672656CB8200DACB98 /* CategoryDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailController.swift; sourceTree = "<group>"; };
 		4AE010532659B3EE003B233C /* AddEditExpenseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditExpenseViewController.swift; sourceTree = "<group>"; };
 		4AF7E14526582A8F000CA89A /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
 		4AFBABD82656E13100EBE4D4 /* AddEditCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditCategoryViewController.swift; sourceTree = "<group>"; };
@@ -77,7 +75,6 @@
 				575A2F9723FC354100E47A7E /* DetailViewController.swift */,
 				575A2F9523FC354100E47A7E /* MasterViewController.swift */,
 				4AE010532659B3EE003B233C /* AddEditExpenseViewController.swift */,
-				4ADE65672656CB8200DACB98 /* CategoryDetailController.swift */,
 				4AFBABD82656E13100EBE4D4 /* AddEditCategoryViewController.swift */,
 				4AFBABDA2656E4FC00EBE4D4 /* CategoryTableViewCell.swift */,
 				4AFBABE22656F72C00EBE4D4 /* NotesPopUpController.swift */,
@@ -286,7 +283,6 @@
 				575A2F8F23FC354100E47A7E /* AppDelegate.swift in Sources */,
 				4AFBABE32656F72C00EBE4D4 /* NotesPopUpController.swift in Sources */,
 				575A2F9823FC354100E47A7E /* DetailViewController.swift in Sources */,
-				4ADE65682656CB8200DACB98 /* CategoryDetailController.swift in Sources */,
 				575A2F9223FC354100E47A7E /* masterDet.xcdatamodeld in Sources */,
 				4AF7E14626582A8F000CA89A /* UITableView.swift in Sources */,
 				4A1ADD75265937FF0079BCD7 /* CircularProgressBarView.swift in Sources */,

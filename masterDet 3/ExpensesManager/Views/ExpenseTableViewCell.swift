@@ -1,11 +1,3 @@
-//
-//  ExpenseTableViewCell.swift
-//  ExpensesManager
-//
-//  Created by Shajeeth Suwarnarajah on 2021-05-22.
-//  Copyright © 2021 Philip Trwoga. All rights reserved.
-//
-
 import UIKit
 
 class ExpenseTableViewCell: UITableViewCell {
@@ -23,14 +15,12 @@ class ExpenseTableViewCell: UITableViewCell {
     override func awakeFromNib() {
        
         super.awakeFromNib()
-//
-        // Initialization code
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
     }
     
     func commonInit1(_ expenseName: String, expenseAmount: Double, expense_date: String, expense_reminder: Bool, occurance: String, categoryBudget: Double, color:String, notes:String) {

@@ -1,14 +1,8 @@
-
-
 import UIKit
 import CoreData
 import Charts
 
 class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedResultsControllerDelegate, UITableViewDelegate, UIPopoverPresentationControllerDelegate{
-  
-    
-    
-    
     
     @IBOutlet var expensesTable: UITableView!
     @IBOutlet var progressBar: CircularProgressBarView!
@@ -24,15 +18,11 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
     var detailItem: ExpensesCategory?
-//        didSet{
-//            configureView()
-//        }
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         configureView()
-//        expensesTable.dataSource = self
         let nibName = UINib(nibName: "ExpenseTableViewCell", bundle: nil)
         expensesTable.register(nibName, forCellReuseIdentifier: "expenseCell")
         self.configureView()
@@ -53,29 +43,27 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
     func configureView() {
         if let category = detailItem{
             
-                let expenses = (category.expenses!.allObjects as! [Expenses])
-
-                let totalExpenses = calculations.calculate_total_expenses(expenses)
-                progressBar.trackColor = UIColor(hexString: "#e3e3e3")
-//                            print(categoryColor)
-                progressBar.progressColor = UIColor(hexString: (category.color)!)
-                progressBar.setProgressWithAnimation(progress: (totalExpenses/Float(category.budget))*1.0)
-
-                category_name_lbl.text = category.name
-                budget_lbl.text = String(category.budget)
-                amount_lbl.text = String(totalExpenses)
-                var remaining = category.budget-Double(totalExpenses)
-
-                if remaining<0{
-                    remaining_lbl.text = String(remaining)
-                    remaining_lbl.textColor = UIColor(hexString: "#d9170d")
-                } else if remaining>0{
-                    remaining_lbl.text = String(remaining)
-                    remaining_lbl.textColor = UIColor(hexString: "#47cc04")
-                }else {
-                    remaining_lbl.text = String(remaining)
-                    remaining_lbl.textColor = UIColor(hexString: "#0483cc")
-//                }
+            let expenses = (category.expenses!.allObjects as! [Expenses])
+            
+            let totalExpenses = calculations.calculate_total_expenses(expenses)
+            progressBar.trackColor = UIColor(hexString: "#e3e3e3")
+            progressBar.progressColor = UIColor(hexString: (category.color)!)
+            progressBar.setProgressWithAnimation(progress: (totalExpenses/Float(category.budget))*1.0)
+            
+            category_name_lbl.text = category.name
+            budget_lbl.text = String(category.budget)
+            amount_lbl.text = String(totalExpenses)
+            var remaining = category.budget-Double(totalExpenses)
+            
+            if remaining<0{
+                remaining_lbl.text = String(remaining)
+                remaining_lbl.textColor = UIColor(hexString: "#d9170d")
+            } else if remaining>0{
+                remaining_lbl.text = String(remaining)
+                remaining_lbl.textColor = UIColor(hexString: "#47cc04")
+            }else {
+                remaining_lbl.text = String(remaining)
+                remaining_lbl.textColor = UIColor(hexString: "#0483cc")
             }
             setupPieChart()
             expensesTable.reloadData()
@@ -108,10 +96,10 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
     }
     
     
-//    MARK: - Table View
+    //    MARK: - Table View
     func numberOfSections(in tableView: UITableView) -> Int {
         return fetchedResultsController.sections?.count ?? 0
-       
+        
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionInfo = fetchedResultsController.sections![section]
@@ -133,7 +121,6 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
         return true
     }
     
@@ -151,7 +138,7 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
         }
     }
     
-//    MARK: - Cell Configurations
+    //    MARK: - Cell Configurations
     func configureCell(_ cell: ExpenseTableViewCell, indexPath: IndexPath) {
         if(self.detailItem != nil){
             let name = (self.fetchedResultsController.fetchedObjects?[indexPath.row].name)!
@@ -167,43 +154,37 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
         }
     }
     
-    
-    
-    
-    
-    
     //    MARK: - Fetched results controller
-    
     var _fetchedResultsController: NSFetchedResultsController<Expenses>? = nil
-     
+    
     var fetchedResultsController: NSFetchedResultsController<Expenses> {
         if _fetchedResultsController != nil{
             return _fetchedResultsController!
         }
-//        build the fetch request
+        //        build the fetch request
         let fetchRequest: NSFetchRequest<Expenses> = Expenses.fetchRequest()
         
-//        add a sort descriptor
+        //        add a sort descriptor
         let sortDescriptor = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
         
-//        add the sort to request
+        //        add the sort to request
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-//        add the predicate
+        //        add the predicate
         if detailItem != nil{
-        let predicate = NSPredicate(format: "category = %@", self.detailItem!)
-        fetchRequest.predicate = predicate
+            let predicate = NSPredicate(format: "category = %@", self.detailItem!)
+            fetchRequest.predicate = predicate
         }
         
-//        intatiate the results
+        //        intatiate the results
         let aFetchedResultsController = NSFetchedResultsController<Expenses>(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: #keyPath(Expenses.expense_category), cacheName: nil)
         
-//        set the delegate
+        //        set the delegate
         aFetchedResultsController.delegate = self
         
         _fetchedResultsController = aFetchedResultsController
         
-//        perform fetch
+        //        perform fetch
         do {
             try _fetchedResultsController!.performFetch()
         } catch {
@@ -213,9 +194,9 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
         return _fetchedResultsController!
     }
     
-
     
-//    MARK: - Table Editing - fetch controller delegate functions
+    
+    //    MARK: - Table Editing - fetch controller delegate functions
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>){
         expensesTable.beginUpdates()
     }
@@ -253,19 +234,14 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
         
     }
     
-    
-    
-    
-    
+    // MARK: - Pie Chart Configurations
     func setupPieChart(){
         pieChart.chartDescription!.enabled = false
         pieChart.drawHoleEnabled = false
         pieChart.rotationAngle = 0
-        //        pieChart.rotationEnabled = false
         pieChart.isUserInteractionEnabled = false
         pieChart.legend.enabled = true
         pieChart.legend.horizontalAlignment = .center
-//        pieChart.legend.orientation = .vertical
         
         pieChart.sizeToFit()
         if let category = detailItem{
@@ -274,15 +250,15 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
             let dataSet = PieChartDataSet(entries: entities, label: "")
             
             pieChart.drawEntryLabelsEnabled = false
-//            Colors
+            
+            //          Pie Chart  Colors
             let c1 = UIColor(hexString: "#eb4034")
             let c2 = UIColor(hexString: "#ebb734")
             let c3 = UIColor(hexString: "#7aeb34")
             let c4 = UIColor(hexString: "#3499eb")
             let c5 = UIColor(hexString: "#7d34eb")
-           
+            
             dataSet.colors = [c1, c2, c3, c4, c5]
-//            dataSet.drawValuesEnabled = true
             dataSet.sliceSpace = 2
             
             pieChart.data = PieChartData(dataSet: dataSet)
@@ -290,9 +266,9 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
+    //    MARK: - Notes Popup Method
     func showPopoverFrom(cell: ExpenseTableViewCell, forButton button: UIButton, forNotes notes: String) {
         let buttonFrame = button.frame
         var showRect = cell.convert(buttonFrame, to: expensesTable)
@@ -315,7 +291,7 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
         }
     }
     
-
+    
 }
 
 extension DetailViewController: ExpenseTableViewCellDelegate {

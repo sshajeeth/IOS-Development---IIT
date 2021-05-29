@@ -1,11 +1,3 @@
-//
-//  Calculations.swift
-//  ExpensesManager
-//
-//  Created by Shajeeth Suwarnarajah on 2021-05-22.
-//  Copyright © 2021 Philip Trwoga. All rights reserved.
-//
-
 import Foundation
 import Charts
 

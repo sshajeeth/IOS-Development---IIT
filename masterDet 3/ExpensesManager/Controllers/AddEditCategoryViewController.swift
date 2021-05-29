@@ -1,11 +1,3 @@
-//
-//  AddEditCategoryViewController.swift
-//  ExpensesManager
-//
-//  Created by Shajeeth Suwarnarajah on 2021-05-20.
-//  Copyright © 2021 Philip Trwoga. All rights reserved.
-//
-
 import UIKit
 import CoreData
 
@@ -39,7 +31,6 @@ class AddEditCategoryViewController: UIViewController, UITextViewDelegate {
             category_notes_tv.textColor = UIColor.lightGray
         }
         configureView()
-        // Do any additional setup after loading the view.
     }
     
     
@@ -63,7 +54,7 @@ class AddEditCategoryViewController: UIViewController, UITextViewDelegate {
             }
             
             color_name = category.color!
-                
+            
             
             
         }
@@ -72,28 +63,28 @@ class AddEditCategoryViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func addCategory(_ sender: UIBarButtonItem) {
         if validateFields(){
-        let entity = NSEntityDescription.entity(forEntityName: "ExpensesCategory", in: context)!
-        var category = NSManagedObject()
-        
-        if editingMode {
-            category = (editingCategory as? ExpensesCategory)!
-        } else {
-            category = NSManagedObject(entity: entity, insertInto: context)
-        }
-        
-        category.setValue(self.category_name_tf.text, forKey: "name")
-        category.setValue(Double(self.category_budget_tf.text!), forKey: "budget")
-        category.setValue(self.category_notes_tv.text, forKey: "notes")
-        category.setValue(self.color_name, forKey: "color")
-        
-    
-        
-        (UIApplication.shared.delegate as! AppDelegate).saveContext()
-        
-        
-        self.dismissPopUp()
-        let date = NSDate()
-        category.setValue(date, forKey: "addedDate")
+            let entity = NSEntityDescription.entity(forEntityName: "ExpensesCategory", in: context)!
+            var category = NSManagedObject()
+            
+            if editingMode {
+                category = (editingCategory as? ExpensesCategory)!
+            } else {
+                category = NSManagedObject(entity: entity, insertInto: context)
+            }
+            
+            category.setValue(self.category_name_tf.text, forKey: "name")
+            category.setValue(Double(self.category_budget_tf.text!), forKey: "budget")
+            category.setValue(self.category_notes_tv.text, forKey: "notes")
+            category.setValue(self.color_name, forKey: "color")
+            
+            
+            
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            
+            
+            self.dismissPopUp()
+            let date = NSDate()
+            category.setValue(date, forKey: "addedDate")
         }else{
             let alert = UIAlertController(title: "Error", message: "Please fill the required fields.", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
