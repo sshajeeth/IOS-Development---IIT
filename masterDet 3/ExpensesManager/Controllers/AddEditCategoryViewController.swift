@@ -51,16 +51,20 @@ class AddEditCategoryViewController: UIViewController, UITextViewDelegate {
         
         if let category = editingCategory{
             if let categoryName = category_name_tf{
-                categoryName.text = editingCategory?.name
+                categoryName.text = category.name
             }
             if let budget = category_budget_tf{
-                var categoryBudget = String(format: "%.2f", editingCategory?.budget as! CVarArg)
+                var categoryBudget = String(format: "%.2f", category.budget as! CVarArg)
                 budget.text = categoryBudget
             }
             if let notes = category_notes_tv{
-                notes.text = editingCategory?.notes
+                notes.text = category.notes
                 
             }
+            
+            color_name = category.color!
+                
+            
             
         }
         
