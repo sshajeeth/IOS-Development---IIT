@@ -51,18 +51,18 @@ class DetailViewController: UIViewController, UITableViewDataSource, NSFetchedRe
             progressBar.setProgressWithAnimation(progress: (totalExpenses/Float(category.budget))*1.0)
             
             category_name_lbl.text = category.name
-            budget_lbl.text = String(category.budget)
-            amount_lbl.text = String(totalExpenses)
+            budget_lbl.text = "\(String(category.budget))£"
+            amount_lbl.text = "\(String(totalExpenses))£"
             var remaining = category.budget-Double(totalExpenses)
             
             if remaining<0{
-                remaining_lbl.text = String(remaining)
+                remaining_lbl.text = "\(String(remaining))£"
                 remaining_lbl.textColor = UIColor(hexString: "#d9170d")
             } else if remaining>0{
-                remaining_lbl.text = String(remaining)
+                remaining_lbl.text = "\(String(remaining))£"
                 remaining_lbl.textColor = UIColor(hexString: "#47cc04")
             }else {
-                remaining_lbl.text = String(remaining)
+                remaining_lbl.text = "\(String(remaining))£"
                 remaining_lbl.textColor = UIColor(hexString: "#0483cc")
             }
             setupPieChart()

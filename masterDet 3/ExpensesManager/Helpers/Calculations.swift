@@ -11,8 +11,7 @@ class Calculation{
                 totalExpenses += Float(expense.amount)
             }
         }
-        
-//        print(totalExpenses)
+
         return totalExpenses
     }
     
